@@ -12,3 +12,4 @@ VALUES
   (4,'Hyacinth','Rodgers','+380630235297'),
   (5,'Carolyn','Hurst','+380953058617');
 SET IDENTITY_INSERT agent OFF
+

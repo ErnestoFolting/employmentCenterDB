@@ -1,7 +1,7 @@
 USE [EmploymentCenter]
 GO
 
-select * from vacancy
+select * from jobless
 drop table payment
 
 CREATE TABLE [dbo].[personalData](
@@ -130,15 +130,18 @@ GO
 CREATE TABLE company(
 	id int NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	name nvarchar(50) NOT NULL,
-	phoneNumber nvarchar(13) NOT NULL,
 	companyAddress nvarchar(50) NOT NULL,
 ) 
 GO
 
-Alter table company
-Add constraint companyPhone unique(phoneNumber)
+CREATE TABLE companyPhoneNumbers(
+	phoneNumber nvarchar(13) NOT NULL PRIMARY KEY,
+	companyId int NOT NULL FOREIGN KEY references company(id) 
+	ON DELETE CASCADE 
+)
+GO
 
-Alter table company
+Alter table companyPhoneNumbers
 Add constraint companyPhoneFormat CHECK (phoneNumber like '+380%' and phoneNumber not like '%[a-Z]%')
 GO
 
