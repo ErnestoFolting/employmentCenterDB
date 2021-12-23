@@ -1,8 +1,8 @@
 USE [EmploymentCenter]
 GO
 
-select * from jobless
-drop table payment
+select * from  companyPhoneNumbers
+drop table jobless
 
 CREATE TABLE [dbo].[personalData](
 	[id] [int] NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -50,12 +50,6 @@ GO
 ALTER TABLE education
 ADD CONSTRAINT check_typeName CHECK (educationTypeName IN ('High School','Associates Degree','Bachelors Degree','Masters Degree'))
 
-CREATE TABLE payment(
-	id int NOT NULL IDENTITY(1,1) PRIMARY KEY,
-	registrationDate smalldatetime check (registrationDate <= GETDATE()) DEFAULT GETDATE(),
-	totalPayment as Datediff(month,registrationDate,GETDATE()) * 2000     
-) 
-GO
 
 CREATE TABLE expectedJob(
 	id int NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -64,9 +58,6 @@ CREATE TABLE expectedJob(
 	expectedSalary int check (expectedSalary>0)  NOT NULL,
 ) 
 GO
-
-alter table expectedJob
-drop constraint FK_positionId
 
 ALTER TABLE expectedJob
 ADD CONSTRAINT FK_positionId
@@ -90,8 +81,6 @@ CREATE TABLE jobless(
 	id int NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	personalDataId int NOT NULL UNIQUE FOREIGN KEY 
 	REFERENCES personalData(id),
-	paymentId int NOT NULL UNIQUE FOREIGN KEY 
-	REFERENCES payment(id),
 	educationId int NOT NULL UNIQUE FOREIGN KEY 
 	REFERENCES education(id),
 	expectedJobId int NOT NULL UNIQUE FOREIGN KEY 
@@ -99,7 +88,9 @@ CREATE TABLE jobless(
 ) 
 GO
 
-
+alter table jobless
+add registrationDate smalldatetime NOT NULL check (registrationDate <= GETDATE()) DEFAULT GETDATE(),
+totalPayment as Datediff(month,registrationDate,GETDATE()) * 2000  
 
 CREATE TABLE agent(
 	id int NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -163,12 +154,9 @@ ADD CONSTRAINT typeRequired_check CHECK (educationTypeRequired IN ('High School'
 
 CREATE TABLE deal(
 	id int NOT NULL IDENTITY(1,1) PRIMARY KEY,
-	agentId int NOT NULL FOREIGN KEY 
-	REFERENCES agent(id),
-	vacancyId int NOT NULL FOREIGN KEY 
-	REFERENCES vacancy(id),
-	joblessId int NOT NULL FOREIGN KEY 
-	REFERENCES jobless(id),
+	agentId int NOT NULL,
+	vacancyId int NOT NULL,
+	joblessId int NOT NULL ,
 	dateOfCreation smalldatetime default getdate()
 	Constraint uniquePos Unique(vacancyId,joblessId)
 ) 
@@ -191,4 +179,3 @@ ADD CONSTRAINT FK_agentId
     FOREIGN KEY (agentId)
     REFERENCES agent (id)
 	ON DELETE CASCADE
-
