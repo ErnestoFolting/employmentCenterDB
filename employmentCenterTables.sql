@@ -65,6 +65,14 @@ CREATE TABLE expectedJob(
 ) 
 GO
 
+alter table expectedJob
+drop constraint FK_positionId
+
+ALTER TABLE expectedJob
+ADD CONSTRAINT FK_positionId
+    FOREIGN KEY (positionId)
+    REFERENCES position (id)
+
 CREATE TABLE position(
 	id int NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	name nvarchar(50) NOT NULL UNIQUE,
@@ -163,5 +171,21 @@ CREATE TABLE deal(
 ) 
 GO
 
+ALTER TABLE deal
+ADD CONSTRAINT FK_joblessId
+    FOREIGN KEY (joblessId)
+    REFERENCES jobless (id)
+	ON DELETE CASCADE
 
+ALTER TABLE deal
+ADD CONSTRAINT FK_vacancyId
+    FOREIGN KEY (vacancyId)
+    REFERENCES vacancy (id)
+	ON DELETE CASCADE
+
+ALTER TABLE deal
+ADD CONSTRAINT FK_agentId
+    FOREIGN KEY (agentId)
+    REFERENCES agent (id)
+	ON DELETE CASCADE
 
