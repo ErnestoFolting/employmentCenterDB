@@ -1,7 +1,7 @@
 USE [EmploymentCenter]
 GO
 
-select * from  companyPhoneNumbers
+select * from jobless
 drop table jobless
 
 CREATE TABLE [dbo].[personalData](

@@ -141,7 +141,6 @@ order by salary DESC
  join position on position.id = vacancy.positionId
  where personalData.phoneNumber = @phoneNumber
 
-
  --17. По номеру телефона компанії знайти її назву та адресу 
  declare @phoneNumberToFind nvarchar(13) = '+380739029871'
  select Name, companyAddress from company
