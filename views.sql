@@ -3,7 +3,6 @@ GO
 
 
 --1. Представлення усіх актуальних вакансій та компаній з номерами телефону для зв'язку
-
 create view allVacancies as
 select vacancy.id, position.name as position ,salary, educationTypeRequired,vacancyDescription, company.name,company.companyAddress, companyPhoneNumbers.phoneNumber from vacancy
 join company on company.id  = vacancy.companyId
@@ -22,7 +21,8 @@ join position on expectedJob.positionId = position.id
 
 --3. Представлення усіх угод з ПІБ безробітнього,його номером телефона, інформацією про вакансію, даними агента, що уклав угоду
 create view allDeals as
-select PIB, allJoblesses.phoneNumber as joblessPhone, allVacancies.position,salary, vacancyDescription,allVacancies.name as company, (agent.Surname + ' ' + agent.Name) as agentPIB,agent.phoneNumber as agentPhone from deal
+select allJoblesses.id as joblessId, PIB, allJoblesses.phoneNumber as joblessPhone,allVacancies.id as vacancyId, allVacancies.position,salary, vacancyDescription,allVacancies.name as company, (agent.Surname + ' ' + agent.Name) as agentPIB,agent.phoneNumber as agentPhone from deal
 join allJoblesses on deal.joblessId = allJoblesses.id
 join allVacancies on allVacancies.id = deal.vacancyId
 join agent on deal.agentId = agent.id
+
