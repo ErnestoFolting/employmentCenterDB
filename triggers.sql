@@ -23,3 +23,18 @@ begin
 	end 
 end
 
+--2. Тригер на додавання безробітнього, щоб одразу виводити які можливі вакансії підходять по його критеріях
+create trigger insertJobless
+on jobless
+for insert
+as
+begin
+	if (@@ROWCOUNT = 1)
+	begin
+		declare @joblessId int = (select id from inserted)
+		select * from allJoblesses
+		join allVacancies on allVacancies.position = allJoblesses.position
+		and allVacancies.educationTypeRequired = allJoblesses.educationTypeName
+		where allJoblesses.id = @joblessId
+	end
+end
