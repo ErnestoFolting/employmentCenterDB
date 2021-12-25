@@ -20,8 +20,6 @@ end
 select * from dbo.registratedInDates('2021-04-01','2022-01-01')
 
 --2. Функція, що показує топ 5 посад та середні заробітні плати по них, починаючи з самих популярних на ринку праці
-drop function showTopPositions
-
 create function showTopPositions
 ( 
 )
