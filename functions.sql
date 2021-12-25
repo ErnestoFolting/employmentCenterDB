@@ -1,7 +1,7 @@
 USE [EmploymentCenter]
 GO
 
---1.Функція, що показує інформацію про зареєстрованих безробітніх за заданий період часу
+--1. Функція, що показує інформацію про зареєстрованих безробітніх за заданий період часу
 create function registratedInDates
 (
 	@dateFrom smalldatetime,
@@ -19,3 +19,38 @@ end
 
 select * from dbo.registratedInDates('2021-04-01','2022-01-01')
 
+--2. Функція, що показує топ 5 посад та середні заробітні плати по них, починаючи з самих популярних на ринку праці
+drop function showTopPositions
+
+create function showTopPositions
+( 
+)
+returns @tempTable Table(position nvarchar(30), avgSalary int, countOfVacancies int)
+as
+begin
+	insert into @tempTable 
+		select top 5 position, avg(salary) as avgSalary, count(id) as countOfVacancies from allVacancies
+		group by position
+		order by countOfVacancies DESC
+	return
+end
+
+select * from dbo.showTopPositions()
+
+--3. Функція, що повертає агентів, що мають хоча б 2 створених угоди та загальну к-сть угод створених ними 
+create function showTopAgents
+( 
+)
+returns @tempTable Table(Surname nvarchar(30), Name nvarchar(30), dealsNumber int)
+as
+begin
+	insert into @tempTable 
+		select Surname, Name, count(deal.id) as dealsNumber from agent 
+		join deal on deal.agentId = agent.id
+		group by Surname, Name
+		having count(deal.id) > 1
+		order by dealsNumber DESC
+	return
+end
+
+select * from dbo.showTopAgents()
